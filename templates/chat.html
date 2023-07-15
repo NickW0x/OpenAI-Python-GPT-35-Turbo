@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #fff;
+      --text-color: #000;
+      --primary-color: #385185;
+      --secondary-color: #efefef;
+    }
+
+    body.dark {
+      --bg-color: #333;
+      --text-color: #fff;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+   /* Header Styles */
+    #header {
+      width: 100%;
+      max-width: 600px; /* Limit width */
+      margin: 0 auto;
+      padding: 10px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #header h1 {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    #header .header-right {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Styles for your logo image */
+    #header .logo {
+      height: 40px;
+      margin-right: 8px;
+    }
+
+    #chatbox {
+      max-width: 600px; /* Limit width */
+      margin: 0 auto;
+      padding: 20px;
+      height: calc(100vh - 130px);
+      overflow-y: scroll;
+      background-color: var(--bg-color);
+    }
+
+    #chatbox .assistant {
+      background-color: #efefef; /* Light gray for assistant's messages */
+      padding: 10px 15px;
+      border-radius: 20px 20px 20px 0;
+      max-width: 80%;
+      margin-bottom: 10px;
+    }
+        
+    #chatbox .user {
+      background-color: #385185; /* Instagram's blue color for user's messages */
+      color: white;
+      padding: 10px 15px;
+      border-radius: 20px 20px 0 20px;
+      max-width: 80%;
+      margin-bottom: 10px;
+      align-self: flex-end;
+    }
+
+    #user-input {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      height: 50px;
+      background-color: white;
+      padding: 10px;
+      align-items: center; 
+    }
+
+    #user-input input[type="text"] {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+    
+    #user-input input[type="submit"] {
+      background-color: #385185; /* Instagram's blue color for button */
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+  </style>
+
+</head>
+<body>
+<script>
+    // Set initial mode
+    if(localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark');
+    }
+
+    function toggleDarkMode() {
+      var body = document.body;
+      body.classList.toggle("dark");
+
+      // Save dark mode state in local storage
+      var darkModeOn = body.classList.contains("dark");
+      localStorage.setItem('darkMode', darkModeOn);
+    }
+  </script>
+
+  <!-- Header -->
+  <div id="header">
+    <h1>MTV Chatbot</h1>
+    <div class="header-right">
+      <img class="logo" src="https://firebasestorage.googleapis.com/v0/b/mtv-smart-app.appspot.com/o/expenseReports%2FNick_White_2023-05-01T14%3A28%3A06.489Z_MTV-solutions-logo.png?alt=media&token=85aabe99-f502-4d19-9ea7-80a2b6cb3d04" alt="Logo">
+      <div class="theme-switch">
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbox -->
+  <div id="chatbox">
+    {% for message in chat_history %}
+      {% if message.role != "system" %}
+        <div class="{{ message.role }}">
+          <strong>{{ message.role }}:</strong> {{ message.content }}  
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- User Input -->
+  <form id="user-input" method="POST">
+    <input type="text" name="user_input"> 
+    <input type="submit" value="Send">
+  </form>
+
+  <script>
+    var chatbox = document.getElementById('chatbox');
+    chatbox.scrollTop = chatbox.scrollHeight;
+  </script>
+
+</body>
+</html>
+
+
